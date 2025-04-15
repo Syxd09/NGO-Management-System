@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Donate - NGO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-100 min-h-screen flex items-center justify-center px-4">
+  <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg transition-all duration-300">
+    <h1 class="text-3xl font-bold text-center mb-6 text-blue-700">Donate to a Cause</h1>
+    <form id="donate-form" class="space-y-4">
+      <label for="cause" class="block font-medium text-gray-700">Select a Cause</label>
+      <select id="cause" name="cause" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400">
+        <option value="Education">Education</option>
+        <option value="Health">Health</option>
+        <option value="Environment">Environment</option>
+      </select>
+
+      <label for="amount" class="block font-medium text-gray-700">Donation Amount ($)</label>
+      <input type="number" id="amount" name="amount" min="1" placeholder="Enter amount" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"/>
+
+      <label for="donorName" class="block font-medium text-gray-700">Your Name</label>
+      <input type="text" id="donorName" name="donorName" placeholder="Full name" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"/>
+
+      <label for="donorEmail" class="block font-medium text-gray-700">Email Address</label>
+      <input type="email" id="donorEmail" name="donorEmail" placeholder="Email" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"/>
+
+      <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">
+        Donate Now
+      </button>
+    </form>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="successModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full">
+      <h2 class="text-xl font-semibold text-green-600 mb-2">Thank you for your donation!</h2>
+      <p class="text-gray-700 mb-4">Your contribution makes a difference.</p>
+      <button onclick="closeModal()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('donate-form');
+    const modal = document.getElementById('successModal');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const donation = {
+        cause: form.cause.value,
+        amount: parseFloat(form.amount.value), // ✅ Save as number
+        donorName: form.donorName.value,
+        donorEmail: form.donorEmail.value,
+        date: new Date().toISOString() // ✅ Full timestamp
+      };
+
+      const existing = JSON.parse(localStorage.getItem('donations') || '[]');
+      existing.push(donation);
+      localStorage.setItem('donations', JSON.stringify(existing));
+
+      form.reset();
+      modal.classList.remove('hidden');
+    });
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      window.location.href = 'index.html'; // Redirect after modal closes
+    }
+  </script>
+</body>
+</html>
